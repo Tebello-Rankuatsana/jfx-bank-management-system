@@ -55,7 +55,7 @@ public class BankController {
         colOwnerName.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
         colBalance.setCellValueFactory(new PropertyValueFactory<>("balance"));
 
-        // Transaction table columns - use the declared variable names
+        // Transaction table columns
         colTransactionId.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
         colOriginAccount.setCellValueFactory(new PropertyValueFactory<>("originAccountId"));
         colDestinationAccount.setCellValueFactory(new PropertyValueFactory<>("destinationAccountId"));
@@ -75,9 +75,8 @@ public class BankController {
         accountList.addListener((javafx.collections.ListChangeListener<? super Account>) c -> refreshComboBoxes());
     }
 
-    public void setUserInfo(String username, String privilege) {
+    public void setUserInfo(String username) {
         this.username = username;
-        // Privilege is ignored – all buttons remain enabled
         userInfoLabel.setText("User: " + username);
     }
 
@@ -113,14 +112,12 @@ public class BankController {
             @Override
             protected Void call() throws Exception {
                 try {
-                    HelloApplication.DB.openConnection();
                     String query = "INSERT INTO accounts (owner_name, balance) VALUES (?, ?)";
                     HelloApplication.DB.setPstmt(query);
                     PreparedStatement pstmt = HelloApplication.DB.getPstmt();
                     pstmt.setString(1, name);
                     pstmt.setDouble(2, balance);
                     HelloApplication.DB.executeUpdatePstmt();
-                    HelloApplication.DB.closeDataLink();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -164,7 +161,6 @@ public class BankController {
             @Override
             protected Void call() throws Exception {
                 try {
-                    HelloApplication.DB.openConnection();
                     String query = "UPDATE accounts SET owner_name = ?, balance = ? WHERE account_id = ?";
                     HelloApplication.DB.setPstmt(query);
                     PreparedStatement pstmt = HelloApplication.DB.getPstmt();
@@ -172,7 +168,6 @@ public class BankController {
                     pstmt.setDouble(2, newBalance);
                     pstmt.setInt(3, selected.getAccountId());
                     HelloApplication.DB.executeUpdatePstmt();
-                    HelloApplication.DB.closeDataLink();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -203,13 +198,11 @@ public class BankController {
                     @Override
                     protected Void call() throws Exception {
                         try {
-                            HelloApplication.DB.openConnection();
                             String query = "DELETE FROM accounts WHERE account_id = ?";
                             HelloApplication.DB.setPstmt(query);
                             PreparedStatement pstmt = HelloApplication.DB.getPstmt();
                             pstmt.setInt(1, selected.getAccountId());
                             HelloApplication.DB.executeUpdatePstmt();
-                            HelloApplication.DB.closeDataLink();
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
@@ -261,7 +254,7 @@ public class BankController {
                     conn = HelloApplication.DB.getDatabaseLink();
                     conn.setAutoCommit(false);
 
-                    // Check balance using account_id
+                    // Check balance
                     String checkQuery = "SELECT balance FROM accounts WHERE account_id = ? FOR UPDATE";
                     HelloApplication.DB.setPstmt(checkQuery);
                     PreparedStatement pstmtCheck = HelloApplication.DB.getPstmt();
@@ -288,7 +281,7 @@ public class BankController {
                     pstmtDep.setInt(2, toId);
                     HelloApplication.DB.executeUpdatePstmt();
 
-                    // Record transaction (origin_account_id, destination_account_id)
+                    // Record transaction
                     String trans = "INSERT INTO transactions (origin_account_id, destination_account_id, amount) VALUES (?, ?, ?)";
                     HelloApplication.DB.setPstmt(trans);
                     PreparedStatement pstmtTrans = HelloApplication.DB.getPstmt();
@@ -355,7 +348,7 @@ public class BankController {
                     conn = HelloApplication.DB.getDatabaseLink();
                     conn.setAutoCommit(false);
 
-                    // Revert old transfer: add back to source, subtract from destination
+                    // Revert old transfer
                     String revertSource = "UPDATE accounts SET balance = balance + ? WHERE account_id = ?";
                     HelloApplication.DB.setPstmt(revertSource);
                     PreparedStatement pstmtRevSrc = HelloApplication.DB.getPstmt();
@@ -370,7 +363,7 @@ public class BankController {
                     pstmtRevDst.setInt(2, toId);
                     HelloApplication.DB.executeUpdatePstmt();
 
-                    // Check if source has enough for new amount
+                    // Check sufficient funds for new amount
                     String checkQuery = "SELECT balance FROM accounts WHERE account_id = ? FOR UPDATE";
                     HelloApplication.DB.setPstmt(checkQuery);
                     PreparedStatement pstmtCheck = HelloApplication.DB.getPstmt();
@@ -396,7 +389,7 @@ public class BankController {
                     pstmtNewD.setInt(2, toId);
                     HelloApplication.DB.executeUpdatePstmt();
 
-                    // Update transaction record (using transaction_id)
+                    // Update transaction record
                     String updateTrans = "UPDATE transactions SET amount = ? WHERE transaction_id = ?";
                     HelloApplication.DB.setPstmt(updateTrans);
                     PreparedStatement pstmtUp = HelloApplication.DB.getPstmt();
@@ -427,14 +420,13 @@ public class BankController {
         new Thread(task).start();
     }
 
-    // ---------- Load data using Statement (correct column names) ----------
+    // ---------- Load data (no open/close) ----------
     private void loadAccounts() {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() throws Exception {
                 ObservableList<Account> list = FXCollections.observableArrayList();
                 try {
-                    HelloApplication.DB.openConnection();
                     String query = "SELECT account_id, owner_name, balance FROM accounts ORDER BY account_id";
                     HelloApplication.DB.setStmt(query);
                     ResultSet rs = HelloApplication.DB.getStmt().executeQuery(query);
@@ -445,7 +437,6 @@ public class BankController {
                                 rs.getDouble("balance")
                         ));
                     }
-                    HelloApplication.DB.closeDataLink();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -468,7 +459,6 @@ public class BankController {
             protected Void call() throws Exception {
                 ObservableList<Transaction> list = FXCollections.observableArrayList();
                 try {
-                    HelloApplication.DB.openConnection();
                     String query = "SELECT transaction_id, origin_account_id, destination_account_id, amount, transaction_date FROM transactions ORDER BY transaction_date DESC";
                     HelloApplication.DB.setStmt(query);
                     ResultSet rs = HelloApplication.DB.getStmt().executeQuery(query);
@@ -481,7 +471,6 @@ public class BankController {
                                 rs.getTimestamp("transaction_date")
                         ));
                     }
-                    HelloApplication.DB.closeDataLink();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -510,6 +499,8 @@ public class BankController {
     @FXML
     private void goBack() {
         try {
+            // Close the connection before returning to login
+            HelloApplication.DB.closeDataLink();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = (Stage) userInfoLabel.getScene().getWindow();
