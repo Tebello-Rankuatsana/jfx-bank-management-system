@@ -1,18 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox spacing="15" alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ranks.bank.LoginController">
-    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
-    <Label text="Bank Management System" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-    <GridPane hgap="10" vgap="10">
-        <Label text="Username:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="usernameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-        <Label text="Password:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <PasswordField fx:id="passwordField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-    </GridPane>
-    <Button fx:id="loginButton" text="Login" onAction="#handleLogin"/>
-    <Label fx:id="statusLabel" textFill="red"/>
+<VBox alignment="CENTER" prefHeight="327.0" prefWidth="411.0" spacing="15" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ranks.bank.LoginController">
+    <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+   <AnchorPane prefHeight="249.0" prefWidth="449.0" VBox.vgrow="NEVER">
+      <children>
+         <ImageView fitHeight="255.0" fitWidth="391.0" opacity="0.6">
+            <image>
+               <Image url="@flat-lay-wallet-near-laptop.jpg" />
+            </image>
+         </ImageView>
+          <Label layoutX="94.0" layoutY="29.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Ranks Banking Coporation" textFill="WHITE" />
+          <GridPane hgap="10" vgap="10">
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
+          </GridPane>
+          <Button fx:id="loginButton" layoutX="173.0" layoutY="170.0" onAction="#handleLogin" text="Login" />
+          <Label fx:id="statusLabel" textFill="red" />
+           <PasswordField fx:id="passwordField" layoutX="80.0" layoutY="115.0" prefWidth="292.0" />
+           <Label layoutX="16.0" layoutY="119.0" text="Password:" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+         </Label>
+           <TextField fx:id="usernameField" layoutX="80.0" layoutY="74.0" prefHeight="26.0" prefWidth="292.0" />
+           <Label layoutX="19.0" layoutY="77.0" text="Username:" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+         </Label>
+      </children>
+   </AnchorPane>
 </VBox>
