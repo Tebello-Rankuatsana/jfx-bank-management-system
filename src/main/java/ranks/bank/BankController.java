@@ -33,32 +33,34 @@ public class BankController {
 
     // Update Transaction
     @FXML private TableView<Transaction> transactionTable;
-    @FXML private TableColumn<Transaction, Integer> colTransId;
-    @FXML private TableColumn<Transaction, Integer> colFromAcc;
-    @FXML private TableColumn<Transaction, Integer> colToAcc;
-    @FXML private TableColumn<Transaction, Double> colTransAmount;
-    @FXML private TableColumn<Transaction, Timestamp> colTransDate;
+    @FXML private TableColumn<Transaction, Integer> colTransactionId;
+    @FXML private TableColumn<Transaction, Integer> colOriginAccount;
+    @FXML private TableColumn<Transaction, Integer> colDestinationAccount;
+    @FXML private TableColumn<Transaction, Double> colTransactionAmount;
+    @FXML private TableColumn<Transaction, Timestamp> colTransactionDate;
     @FXML private TextField newAmountField;
     @FXML private Button updateTransactionBtn;
     @FXML private Label updateStatusLabel;
 
     @FXML private Label userInfoLabel;
     private String username;
-    private String userPrivilege;
 
     private ObservableList<Account> accountList = FXCollections.observableArrayList();
     private ObservableList<Transaction> transactionList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        colAccountId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        // Account table columns
+        colAccountId.setCellValueFactory(new PropertyValueFactory<>("accountId"));
         colOwnerName.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
         colBalance.setCellValueFactory(new PropertyValueFactory<>("balance"));
-        colTransId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colFromAcc.setCellValueFactory(new PropertyValueFactory<>("fromAccountId"));
-        colToAcc.setCellValueFactory(new PropertyValueFactory<>("toAccountId"));
-        colTransAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        colTransDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+        // Transaction table columns - use the declared variable names
+        colTransactionId.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
+        colOriginAccount.setCellValueFactory(new PropertyValueFactory<>("originAccountId"));
+        colDestinationAccount.setCellValueFactory(new PropertyValueFactory<>("destinationAccountId"));
+        colTransactionAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        colTransactionDate.setCellValueFactory(new PropertyValueFactory<>("date"));
 
         loadAccounts();
         loadTransactions();
@@ -75,28 +77,21 @@ public class BankController {
 
     public void setUserInfo(String username, String privilege) {
         this.username = username;
-        this.userPrivilege = privilege;
-        userInfoLabel.setText("User: " + username + " | Role: " + privilege);
-//        if ("VIEW_ONLY".equals(privilege)) {
-//            createBtn.setDisable(true);
-//            updateBtn.setDisable(true);
-//            deleteBtn.setDisable(true);
-//            transferBtn.setDisable(true);
-//            updateTransactionBtn.setDisable(true);
-//        }
+        // Privilege is ignored – all buttons remain enabled
+        userInfoLabel.setText("User: " + username);
     }
 
     private void refreshComboBoxes() {
         fromAccountCombo.getItems().clear();
         toAccountCombo.getItems().clear();
         for (Account acc : accountList) {
-            String item = acc.getId() + " - " + acc.getOwnerName();
+            String item = acc.getAccountId() + " - " + acc.getOwnerName();
             fromAccountCombo.getItems().add(item);
             toAccountCombo.getItems().add(item);
         }
     }
 
-    // creating account
+    // ---------- CRUD ----------
     @FXML
     private void createAccount() {
         String name = ownerNameField.getText();
@@ -175,7 +170,7 @@ public class BankController {
                     PreparedStatement pstmt = HelloApplication.DB.getPstmt();
                     pstmt.setString(1, newName);
                     pstmt.setDouble(2, newBalance);
-                    pstmt.setInt(3, selected.getId());
+                    pstmt.setInt(3, selected.getAccountId());
                     HelloApplication.DB.executeUpdatePstmt();
                     HelloApplication.DB.closeDataLink();
                 } catch (SQLException e) {
@@ -212,7 +207,7 @@ public class BankController {
                             String query = "DELETE FROM accounts WHERE account_id = ?";
                             HelloApplication.DB.setPstmt(query);
                             PreparedStatement pstmt = HelloApplication.DB.getPstmt();
-                            pstmt.setInt(1, selected.getId());
+                            pstmt.setInt(1, selected.getAccountId());
                             HelloApplication.DB.executeUpdatePstmt();
                             HelloApplication.DB.closeDataLink();
                         } catch (SQLException e) {
@@ -266,8 +261,8 @@ public class BankController {
                     conn = HelloApplication.DB.getDatabaseLink();
                     conn.setAutoCommit(false);
 
-                    // Check balance using DBConnection style
-                    String checkQuery = "SELECT balance FROM accounts WHERE id = ? FOR UPDATE";
+                    // Check balance using account_id
+                    String checkQuery = "SELECT balance FROM accounts WHERE account_id = ? FOR UPDATE";
                     HelloApplication.DB.setPstmt(checkQuery);
                     PreparedStatement pstmtCheck = HelloApplication.DB.getPstmt();
                     pstmtCheck.setInt(1, fromId);
@@ -278,7 +273,7 @@ public class BankController {
                     rs.close();
 
                     // Withdraw
-                    String withdraw = "UPDATE accounts SET balance = balance - ? WHERE id = ?";
+                    String withdraw = "UPDATE accounts SET balance = balance - ? WHERE account_id = ?";
                     HelloApplication.DB.setPstmt(withdraw);
                     PreparedStatement pstmtWith = HelloApplication.DB.getPstmt();
                     pstmtWith.setDouble(1, amount);
@@ -286,15 +281,15 @@ public class BankController {
                     HelloApplication.DB.executeUpdatePstmt();
 
                     // Deposit
-                    String deposit = "UPDATE accounts SET balance = balance + ? WHERE id = ?";
+                    String deposit = "UPDATE accounts SET balance = balance + ? WHERE account_id = ?";
                     HelloApplication.DB.setPstmt(deposit);
                     PreparedStatement pstmtDep = HelloApplication.DB.getPstmt();
                     pstmtDep.setDouble(1, amount);
                     pstmtDep.setInt(2, toId);
                     HelloApplication.DB.executeUpdatePstmt();
 
-                    // Record transaction
-                    String trans = "INSERT INTO transactions (from_account_id, to_account_id, amount) VALUES (?, ?, ?)";
+                    // Record transaction (origin_account_id, destination_account_id)
+                    String trans = "INSERT INTO transactions (origin_account_id, destination_account_id, amount) VALUES (?, ?, ?)";
                     HelloApplication.DB.setPstmt(trans);
                     PreparedStatement pstmtTrans = HelloApplication.DB.getPstmt();
                     pstmtTrans.setInt(1, fromId);
@@ -325,7 +320,7 @@ public class BankController {
         new Thread(task).start();
     }
 
-    // ---------- Update Transaction (revert old, apply new, rollback on failure) ----------
+    // ---------- Update Transaction (revert old, apply new, rollback) ----------
     @FXML
     private void updateTransaction() {
         Transaction selected = transactionTable.getSelectionModel().getSelectedItem();
@@ -348,9 +343,9 @@ public class BankController {
         }
 
         double oldAmount = selected.getAmount();
-        int fromId = selected.getFromAccountId();
-        int toId = selected.getToAccountId();
-        int transId = selected.getId();
+        int fromId = selected.getOriginAccountId();
+        int toId = selected.getDestinationAccountId();
+        int transId = selected.getTransactionId();
 
         Task<Void> task = new Task<>() {
             @Override
@@ -361,14 +356,14 @@ public class BankController {
                     conn.setAutoCommit(false);
 
                     // Revert old transfer: add back to source, subtract from destination
-                    String revertSource = "UPDATE accounts SET balance = balance + ? WHERE id = ?";
+                    String revertSource = "UPDATE accounts SET balance = balance + ? WHERE account_id = ?";
                     HelloApplication.DB.setPstmt(revertSource);
                     PreparedStatement pstmtRevSrc = HelloApplication.DB.getPstmt();
                     pstmtRevSrc.setDouble(1, oldAmount);
                     pstmtRevSrc.setInt(2, fromId);
                     HelloApplication.DB.executeUpdatePstmt();
 
-                    String revertDest = "UPDATE accounts SET balance = balance - ? WHERE id = ?";
+                    String revertDest = "UPDATE accounts SET balance = balance - ? WHERE account_id = ?";
                     HelloApplication.DB.setPstmt(revertDest);
                     PreparedStatement pstmtRevDst = HelloApplication.DB.getPstmt();
                     pstmtRevDst.setDouble(1, oldAmount);
@@ -376,7 +371,7 @@ public class BankController {
                     HelloApplication.DB.executeUpdatePstmt();
 
                     // Check if source has enough for new amount
-                    String checkQuery = "SELECT balance FROM accounts WHERE id = ? FOR UPDATE";
+                    String checkQuery = "SELECT balance FROM accounts WHERE account_id = ? FOR UPDATE";
                     HelloApplication.DB.setPstmt(checkQuery);
                     PreparedStatement pstmtCheck = HelloApplication.DB.getPstmt();
                     pstmtCheck.setInt(1, fromId);
@@ -387,22 +382,22 @@ public class BankController {
                     rs.close();
 
                     // Apply new transfer
-                    String newWithdraw = "UPDATE accounts SET balance = balance - ? WHERE id = ?";
+                    String newWithdraw = "UPDATE accounts SET balance = balance - ? WHERE account_id = ?";
                     HelloApplication.DB.setPstmt(newWithdraw);
                     PreparedStatement pstmtNewW = HelloApplication.DB.getPstmt();
                     pstmtNewW.setDouble(1, newAmount);
                     pstmtNewW.setInt(2, fromId);
                     HelloApplication.DB.executeUpdatePstmt();
 
-                    String newDeposit = "UPDATE accounts SET balance = balance + ? WHERE id = ?";
+                    String newDeposit = "UPDATE accounts SET balance = balance + ? WHERE account_id = ?";
                     HelloApplication.DB.setPstmt(newDeposit);
                     PreparedStatement pstmtNewD = HelloApplication.DB.getPstmt();
                     pstmtNewD.setDouble(1, newAmount);
                     pstmtNewD.setInt(2, toId);
                     HelloApplication.DB.executeUpdatePstmt();
 
-                    // Update transaction record
-                    String updateTrans = "UPDATE transactions SET amount = ? WHERE id = ?";
+                    // Update transaction record (using transaction_id)
+                    String updateTrans = "UPDATE transactions SET amount = ? WHERE transaction_id = ?";
                     HelloApplication.DB.setPstmt(updateTrans);
                     PreparedStatement pstmtUp = HelloApplication.DB.getPstmt();
                     pstmtUp.setDouble(1, newAmount);
@@ -432,7 +427,7 @@ public class BankController {
         new Thread(task).start();
     }
 
-    // ---------- Load data using Statement (no ArrayList) ----------
+    // ---------- Load data using Statement (correct column names) ----------
     private void loadAccounts() {
         Task<Void> task = new Task<>() {
             @Override
@@ -440,12 +435,12 @@ public class BankController {
                 ObservableList<Account> list = FXCollections.observableArrayList();
                 try {
                     HelloApplication.DB.openConnection();
-                    String query = "SELECT id, owner_name, balance FROM accounts ORDER BY id";
+                    String query = "SELECT account_id, owner_name, balance FROM accounts ORDER BY account_id";
                     HelloApplication.DB.setStmt(query);
                     ResultSet rs = HelloApplication.DB.getStmt().executeQuery(query);
                     while (rs.next()) {
                         list.add(new Account(
-                                rs.getInt("id"),
+                                rs.getInt("account_id"),
                                 rs.getString("owner_name"),
                                 rs.getDouble("balance")
                         ));
@@ -474,14 +469,14 @@ public class BankController {
                 ObservableList<Transaction> list = FXCollections.observableArrayList();
                 try {
                     HelloApplication.DB.openConnection();
-                    String query = "SELECT id, from_account_id, to_account_id, amount, transaction_date FROM transactions ORDER BY transaction_date DESC";
+                    String query = "SELECT transaction_id, origin_account_id, destination_account_id, amount, transaction_date FROM transactions ORDER BY transaction_date DESC";
                     HelloApplication.DB.setStmt(query);
                     ResultSet rs = HelloApplication.DB.getStmt().executeQuery(query);
                     while (rs.next()) {
                         list.add(new Transaction(
-                                rs.getInt("id"),
-                                rs.getInt("from_account_id"),
-                                rs.getInt("to_account_id"),
+                                rs.getInt("transaction_id"),
+                                rs.getInt("origin_account_id"),
+                                rs.getInt("destination_account_id"),
                                 rs.getDouble("amount"),
                                 rs.getTimestamp("transaction_date")
                         ));
