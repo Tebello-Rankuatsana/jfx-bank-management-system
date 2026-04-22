@@ -5,21 +5,23 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Account {
-    private final SimpleIntegerProperty id;
+    private final SimpleIntegerProperty accountId;
     private final SimpleStringProperty ownerName;
     private final SimpleDoubleProperty balance;
 
-    public Account(int id, String ownerName, double balance) {
-        this.id = new SimpleIntegerProperty(id);
+    public Account(int accountId, String ownerName, double balance) {
+        this.accountId = new SimpleIntegerProperty(accountId);
         this.ownerName = new SimpleStringProperty(ownerName);
         this.balance = new SimpleDoubleProperty(balance);
     }
 
-    public int getId() { return id.get(); }
-    public SimpleIntegerProperty idProperty() { return id; }
+    public int getAccountId() { return accountId.get(); }
+    public SimpleIntegerProperty accountIdProperty() { return accountId; }
+
     public String getOwnerName() { return ownerName.get(); }
     public SimpleStringProperty ownerNameProperty() { return ownerName; }
     public void setOwnerName(String ownerName) { this.ownerName.set(ownerName); }
+
     public double getBalance() { return balance.get(); }
     public SimpleDoubleProperty balanceProperty() { return balance; }
     public void setBalance(double balance) { this.balance.set(balance); }
