@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ranks.bank.BankController">
+    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label fx:id="userInfoLabel" style="-fx-font-size: 12px;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Logout" onAction="#goBack"/>
+    </HBox>
+    <TabPane>
+        <Tab text="Accounts">
+            <VBox spacing="10">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                <HBox spacing="10">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Owner Name"/>
+                        <TextField fx:id="ownerNameField"/>
+                        <Label text="Balance"/>
+                        <TextField fx:id="initialBalanceField"/>
+                        <HBox spacing="5">
+                            <Button fx:id="createBtn" text="Create" onAction="#createAccount"/>
+                            <Button fx:id="updateBtn" text="Update" onAction="#updateAccount"/>
+                            <Button fx:id="deleteBtn" text="Delete" onAction="#deleteAccount"/>
+                        </HBox>
+                    </VBox>
+                    <TableView fx:id="accountTable" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colAccountId" text="ID"/>
+                            <TableColumn fx:id="colOwnerName" text="Owner Name"/>
+                            <TableColumn fx:id="colBalance" text="Balance"/>
+                        </columns>
+                    </TableView>
+                </HBox>
+            </VBox>
+        </Tab>
+        <Tab text="Transfer Money">
+            <VBox spacing="10">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                <GridPane hgap="10" vgap="10">
+                    <Label text="From Account:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <ComboBox fx:id="fromAccountCombo" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    <Label text="To Account:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <ComboBox fx:id="toAccountCombo" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    <Label text="Amount:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextField fx:id="transferAmountField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    <Button fx:id="transferBtn" text="Transfer" onAction="#transferMoney" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                </GridPane>
+                <Label fx:id="transferStatusLabel" textFill="red"/>
+            </VBox>
+        </Tab>
+        <Tab text="Update Transaction">
+            <VBox spacing="10">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                <TableView fx:id="transactionTable" VBox.vgrow="ALWAYS" prefHeight="200">
+                    <columns>
+                        <TableColumn fx:id="colTransId" text="ID"/>
+                        <TableColumn fx:id="colFromAcc" text="From Acc"/>
+                        <TableColumn fx:id="colToAcc" text="To Acc"/>
+                        <TableColumn fx:id="colTransAmount" text="Amount"/>
+                        <TableColumn fx:id="colTransDate" text="Date"/>
+                    </columns>
+                </TableView>
+                <HBox spacing="10">
+                    <Label text="New Amount:"/>
+                    <TextField fx:id="newAmountField"/>
+                    <Button fx:id="updateTransactionBtn" text="Update Transaction" onAction="#updateTransaction"/>
+                </HBox>
+                <Label fx:id="updateStatusLabel" textFill="red"/>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>
