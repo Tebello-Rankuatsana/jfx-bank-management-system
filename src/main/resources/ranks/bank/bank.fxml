@@ -6,12 +6,15 @@
 
 <VBox spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ranks.bank.BankController">
     <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label fx:id="userInfoLabel" style="-fx-font-size: 12px;"/>
         <Region HBox.hgrow="ALWAYS"/>
         <Button text="Logout" onAction="#goBack"/>
     </HBox>
+
     <TabPane>
+        <!-- accounts section -->
         <Tab text="Accounts">
             <VBox spacing="10">
                 <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
@@ -29,7 +32,7 @@
                     </VBox>
                     <TableView fx:id="accountTable" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="colAccountId" text="ID"/>
+                            <TableColumn fx:id="colAccountId" text="Account ID"/>
                             <TableColumn fx:id="colOwnerName" text="Owner Name"/>
                             <TableColumn fx:id="colBalance" text="Balance"/>
                         </columns>
@@ -37,31 +40,39 @@
                 </HBox>
             </VBox>
         </Tab>
+
+        <!-- Transfer section -->
         <Tab text="Transfer Money">
             <VBox spacing="10">
                 <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
                 <GridPane hgap="10" vgap="10">
                     <Label text="From Account:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                     <ComboBox fx:id="fromAccountCombo" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
                     <Label text="To Account:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                     <ComboBox fx:id="toAccountCombo" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
                     <Label text="Amount:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                     <TextField fx:id="transferAmountField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
                     <Button fx:id="transferBtn" text="Transfer" onAction="#transferMoney" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
                 </GridPane>
                 <Label fx:id="transferStatusLabel" textFill="red"/>
             </VBox>
         </Tab>
+
+        <!-- updatte section -->
         <Tab text="Update Transaction">
             <VBox spacing="10">
                 <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
                 <TableView fx:id="transactionTable" VBox.vgrow="ALWAYS" prefHeight="200">
                     <columns>
-                        <TableColumn fx:id="colTransId" text="ID"/>
-                        <TableColumn fx:id="colFromAcc" text="From Acc"/>
-                        <TableColumn fx:id="colToAcc" text="To Acc"/>
-                        <TableColumn fx:id="colTransAmount" text="Amount"/>
-                        <TableColumn fx:id="colTransDate" text="Date"/>
+
+                        <TableColumn fx:id="colTransactionId" text="Transaction ID"/>
+                        <TableColumn fx:id="colOriginAccount" text="Origin Account"/>
+                        <TableColumn fx:id="colDestinationAccount" text="Destination Account"/>
+                        <TableColumn fx:id="colTransactionAmount" text="Amount"/>
+                        <TableColumn fx:id="colTransactionDate" text="Date"/>
                     </columns>
                 </TableView>
                 <HBox spacing="10">
