@@ -33,7 +33,7 @@ public class LoginController {
         Task<Boolean> authTask = new Task<>() {
             @Override
             protected Boolean call() throws Exception {
-                String url = "jdbc:mysql://localhost/bank_db";
+                String url = "jdbc:mysql://localhost/banksystem";
                 try (Connection conn = DriverManager.getConnection(url, username, password)) {
                     return true;
                 } catch (SQLException e) {
@@ -76,7 +76,6 @@ public class LoginController {
             stage.show();
         } catch (Exception ex) {
             ex.printStackTrace();
-            statusLabel.setText("Failed to load main window.");
         }
     }
 }
