@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class DBConnection {
     private Connection databaseLink;
-    private final String databaseName = "bank_db";
+    private final String databaseName = "banksystem";
     private String databaseUser;
     private String databasePassword;
     private final String url = "jdbc:mysql://localhost/"+databaseName;
