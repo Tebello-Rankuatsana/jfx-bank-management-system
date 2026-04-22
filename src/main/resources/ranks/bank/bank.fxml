@@ -1,40 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ranks.bank.BankController">
-    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+<VBox spacing="10" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ranks.bank.BankController">
+    <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label fx:id="userInfoLabel" style="-fx-font-size: 12px;"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Logout" onAction="#goBack"/>
+        <Label fx:id="userInfoLabel" style="-fx-font-size: 12px;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#goBack" text="Logout" />
     </HBox>
 
     <TabPane>
         <!-- accounts section -->
         <Tab text="Accounts">
             <VBox spacing="10">
-                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
                 <HBox spacing="10">
                     <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="Owner Name"/>
-                        <TextField fx:id="ownerNameField"/>
-                        <Label text="Balance"/>
-                        <TextField fx:id="initialBalanceField"/>
+                        <Label text="Owner Name" textFill="WHITE" />
+                        <TextField fx:id="ownerNameField" />
+                        <Label text="Balance" textFill="WHITE" />
+                        <TextField fx:id="initialBalanceField" />
                         <HBox spacing="5">
-                            <Button fx:id="createBtn" text="Create" onAction="#createAccount"/>
-                            <Button fx:id="updateBtn" text="Update" onAction="#updateAccount"/>
-                            <Button fx:id="deleteBtn" text="Delete" onAction="#deleteAccount"/>
+                            <Button fx:id="createBtn" onAction="#createAccount" text="Create" />
+                            <Button fx:id="updateBtn" onAction="#updateAccount" text="Update" />
+                            <Button fx:id="deleteBtn" onAction="#deleteAccount" text="Delete" />
                         </HBox>
                     </VBox>
-                    <TableView fx:id="accountTable" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                    <TableView fx:id="accountTable" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="colAccountId" text="Account ID"/>
-                            <TableColumn fx:id="colOwnerName" text="Owner Name"/>
-                            <TableColumn fx:id="colBalance" text="Balance"/>
+                            <TableColumn fx:id="colAccountId" text="Account ID" />
+                            <TableColumn fx:id="colOwnerName" text="Owner Name" />
+                            <TableColumn fx:id="colBalance" text="Balance" />
                         </columns>
                     </TableView>
                 </HBox>
@@ -44,43 +56,53 @@
         <!-- Transfer section -->
         <Tab text="Transfer Money">
             <VBox spacing="10">
-                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
                 <GridPane hgap="10" vgap="10">
-                    <Label text="From Account:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                    <ComboBox fx:id="fromAccountCombo" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    <Label text="From Account:" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <ComboBox fx:id="fromAccountCombo" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                    <Label text="To Account:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                    <ComboBox fx:id="toAccountCombo" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    <Label text="To Account:" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <ComboBox fx:id="toAccountCombo" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                    <Label text="Amount:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                    <TextField fx:id="transferAmountField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    <Label text="Amount:" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <TextField fx:id="transferAmountField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                    <Button fx:id="transferBtn" text="Transfer" onAction="#transferMoney" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                    <Button fx:id="transferBtn" onAction="#transferMoney" text="Transfer" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
                 </GridPane>
-                <Label fx:id="transferStatusLabel" textFill="red"/>
+                <Label fx:id="transferStatusLabel" textFill="red" />
             </VBox>
         </Tab>
 
         <!-- updatte section -->
         <Tab text="Update Transaction">
             <VBox spacing="10">
-                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
-                <TableView fx:id="transactionTable" VBox.vgrow="ALWAYS" prefHeight="200">
+                <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
+                <TableView fx:id="transactionTable" prefHeight="200" VBox.vgrow="ALWAYS">
                     <columns>
 
-                        <TableColumn fx:id="colTransactionId" text="Transaction ID"/>
-                        <TableColumn fx:id="colOriginAccount" text="Origin Account"/>
-                        <TableColumn fx:id="colDestinationAccount" text="Destination Account"/>
-                        <TableColumn fx:id="colTransactionAmount" text="Amount"/>
-                        <TableColumn fx:id="colTransactionDate" text="Date"/>
+                        <TableColumn fx:id="colTransactionId" text="Transaction ID" />
+                        <TableColumn fx:id="colOriginAccount" text="Origin Account" />
+                        <TableColumn fx:id="colDestinationAccount" text="Destination Account" />
+                        <TableColumn fx:id="colTransactionAmount" text="Amount" />
+                        <TableColumn fx:id="colTransactionDate" text="Date" />
                     </columns>
                 </TableView>
                 <HBox spacing="10">
-                    <Label text="New Amount:"/>
-                    <TextField fx:id="newAmountField"/>
-                    <Button fx:id="updateTransactionBtn" text="Update Transaction" onAction="#updateTransaction"/>
+                    <Label text="New Amount:" textFill="WHITE" />
+                    <TextField fx:id="newAmountField" />
+                    <Button fx:id="updateTransactionBtn" onAction="#updateTransaction" text="Update Transaction" />
                 </HBox>
-                <Label fx:id="updateStatusLabel" textFill="red"/>
+                <Label fx:id="updateStatusLabel" textFill="red" />
             </VBox>
         </Tab>
     </TabPane>
