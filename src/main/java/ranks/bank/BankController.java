@@ -252,7 +252,7 @@ public class BankController {
                 Connection conn = null;
                 try {
                     conn = HelloApplication.DB.getDatabaseLink();
-//                    setAutoCommit(false)
+//                    setAutoCommit(false): this is so that changes do happen immediately(kinda like a draft mode)
                     conn.setAutoCommit(false);
 
                     // Check balance
@@ -291,8 +291,12 @@ public class BankController {
                     pstmtTrans.setDouble(3, amount);
                     HelloApplication.DB.executeUpdatePstmt();
 
+//                    at the end of a successful transaction, conn.commit() is ran to make changes
+//                    if all steps succeed, commit
                     conn.commit();
                 } catch (SQLException e) {
+//                    rollback means that if any error happens, restart the transaction from the very beginning
+//                    if exception happens, we rollback
                     if (conn != null) conn.rollback();
                     throw e;
                 } finally {
