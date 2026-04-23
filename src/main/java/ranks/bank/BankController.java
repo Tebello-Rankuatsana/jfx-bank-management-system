@@ -294,6 +294,7 @@ public class BankController {
 //                    at the end of a successful transaction, conn.commit() is ran to make changes
 //                    if all steps succeed, commit
                     conn.commit();
+//                    this catch any type of error that could occur
                 } catch (SQLException e) {
 //                    rollback means that if any error happens, restart the transaction from the very beginning
 //                    if exception happens, we rollback
