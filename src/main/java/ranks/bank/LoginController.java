@@ -28,7 +28,7 @@ public class LoginController {
         }
 
         loginButton.setDisable(true);
-        statusLabel.setText("Authenticating...");
+        statusLabel.setText("loading...");
 
         Task<Boolean> authTask = new Task<>() {
             @Override
