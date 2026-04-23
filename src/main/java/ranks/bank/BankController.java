@@ -90,7 +90,7 @@ public class BankController {
         }
     }
 
-    // ---------- CRUD ----------
+    // creating account
     @FXML
     private void createAccount() {
         String name = ownerNameField.getText();
@@ -135,6 +135,7 @@ public class BankController {
         new Thread(task).start();
     }
 
+//    updating account
     @FXML
     private void updateAccount() {
         Account selected = accountTable.getSelectionModel().getSelectedItem();
@@ -183,6 +184,7 @@ public class BankController {
         new Thread(task).start();
     }
 
+//    deleting an account
     @FXML
     private void deleteAccount() {
         Account selected = accountTable.getSelectionModel().getSelectedItem();
@@ -220,7 +222,7 @@ public class BankController {
         });
     }
 
-    // ---------- Transfer (with commit/rollback) ----------
+    // transfer function with commit and rollback
     @FXML
     private void transferMoney() {
         String fromItem = fromAccountCombo.getValue();
