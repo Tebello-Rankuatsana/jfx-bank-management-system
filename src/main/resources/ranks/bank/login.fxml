@@ -14,16 +14,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="327.0" prefWidth="411.0" spacing="15" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ranks.bank.LoginController">
+<VBox alignment="CENTER" prefHeight="327.0" prefWidth="411.0" spacing="15" style="-fx-background-color: grey; -fx-border-color: #ff6200;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ranks.bank.LoginController">
     <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
    <AnchorPane prefHeight="249.0" prefWidth="449.0" VBox.vgrow="NEVER">
       <children>
-         <ImageView fitHeight="255.0" fitWidth="391.0" opacity="0.6">
+         <ImageView fitHeight="255.0" fitWidth="391.0" opacity="0.6" style="-fx-border-color: #ff6200;">
             <image>
                <Image url="@flat-lay-wallet-near-laptop.jpg" />
             </image>
          </ImageView>
-          <Label layoutX="94.0" layoutY="29.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Ranks Banking Coporation" textFill="WHITE" />
+          <Label layoutX="96.0" layoutY="79.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Ranks Banking Coporation" textFill="#ff6200" />
           <GridPane hgap="10" vgap="10">
             <columnConstraints>
                <ColumnConstraints />
@@ -34,20 +34,25 @@
                <RowConstraints />
             </rowConstraints>
           </GridPane>
-          <Button fx:id="loginButton" layoutX="173.0" layoutY="170.0" onAction="#handleLogin" text="Login" />
+          <Button fx:id="loginButton" layoutX="175.0" layoutY="202.0" onAction="#handleLogin" text="Login" textFill="#ff6200" />
           <Label fx:id="statusLabel" textFill="red" />
-           <PasswordField fx:id="passwordField" layoutX="80.0" layoutY="115.0" prefWidth="292.0" />
-           <Label layoutX="16.0" layoutY="119.0" text="Password:" textFill="WHITE">
+           <PasswordField fx:id="passwordField" layoutX="83.0" layoutY="148.0" prefWidth="292.0" />
+           <Label layoutX="21.0" layoutY="151.0" text="Password:" textFill="#ff6200">
             <font>
                <Font name="System Bold" size="12.0" />
             </font>
          </Label>
-           <TextField fx:id="usernameField" layoutX="80.0" layoutY="74.0" prefHeight="26.0" prefWidth="292.0" />
-           <Label layoutX="19.0" layoutY="77.0" text="Username:" textFill="WHITE">
+           <TextField fx:id="usernameField" layoutX="82.0" layoutY="106.0" prefHeight="26.0" prefWidth="292.0" />
+           <Label layoutX="21.0" layoutY="109.0" text="Username:" textFill="#ff6200">
             <font>
                <Font name="System Bold" size="12.0" />
             </font>
          </Label>
+         <ImageView fitHeight="83.0" fitWidth="57.0" layoutX="167.0">
+            <image>
+               <Image url="@../../../../../../../../web%20design%20logo.png" />
+            </image>
+         </ImageView>
       </children>
    </AnchorPane>
 </VBox>
