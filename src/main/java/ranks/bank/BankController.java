@@ -252,6 +252,7 @@ public class BankController {
                 Connection conn = null;
                 try {
                     conn = HelloApplication.DB.getDatabaseLink();
+//                    setAutoCommit(false)
                     conn.setAutoCommit(false);
 
                     // Check balance
@@ -313,7 +314,7 @@ public class BankController {
         new Thread(task).start();
     }
 
-    // ---------- Update Transaction (revert old, apply new, rollback) ----------
+    // rollback logic
     @FXML
     private void updateTransaction() {
         Transaction selected = transactionTable.getSelectionModel().getSelectedItem();
@@ -420,7 +421,7 @@ public class BankController {
         new Thread(task).start();
     }
 
-    // ---------- Load data (no open/close) ----------
+    // loading data
     private void loadAccounts() {
         Task<Void> task = new Task<>() {
             @Override
@@ -499,7 +500,7 @@ public class BankController {
     @FXML
     private void goBack() {
         try {
-            // Close the connection before returning to login
+            // closing the connection before returning to login
             HelloApplication.DB.closeDataLink();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
             Scene scene = new Scene(loader.load());
