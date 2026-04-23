@@ -9,6 +9,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -22,31 +24,36 @@
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label fx:id="userInfoLabel" style="-fx-font-size: 12px;" />
         <Region HBox.hgrow="ALWAYS" />
-        <Button onAction="#goBack" text="Logout" />
+        <Button onAction="#goBack" text="Logout" textFill="#ff6200" />
+      <ImageView fitHeight="42.0" fitWidth="42.0">
+         <image>
+            <Image url="@—Pngtree—money%20transfer%20line%20black%20icon_3767626.png" />
+         </image>
+      </ImageView>
     </HBox>
 
     <TabPane>
         <!-- accounts section -->
-        <Tab text="Accounts">
+        <Tab style="-fx-font-color: #ff6200;" text="Accounts">
             <VBox spacing="10">
                 <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
                 <HBox spacing="10">
                     <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="Owner Name" textFill="WHITE" />
+                        <Label text="Owner Name" textFill="#ff6200" />
                         <TextField fx:id="ownerNameField" />
-                        <Label text="Balance" textFill="WHITE" />
+                        <Label text="Balance" textFill="#ff6200" />
                         <TextField fx:id="initialBalanceField" />
                         <HBox spacing="5">
-                            <Button fx:id="createBtn" onAction="#createAccount" text="Create" />
-                            <Button fx:id="updateBtn" onAction="#updateAccount" text="Update" />
-                            <Button fx:id="deleteBtn" onAction="#deleteAccount" text="Delete" />
+                            <Button fx:id="createBtn" onAction="#createAccount" text="Create" textFill="#ff6200" />
+                            <Button fx:id="updateBtn" onAction="#updateAccount" text="Update" textFill="#ff6200" />
+                            <Button fx:id="deleteBtn" onAction="#deleteAccount" text="Delete" textFill="#ff6200" />
                         </HBox>
                     </VBox>
                     <TableView fx:id="accountTable" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                         <columns>
                             <TableColumn fx:id="colAccountId" text="Account ID" />
                             <TableColumn fx:id="colOwnerName" text="Owner Name" />
-                            <TableColumn fx:id="colBalance" text="Balance" />
+                            <TableColumn fx:id="colBalance" style="-fx-fill: #ff6200;" text="Balance" />
                         </columns>
                     </TableView>
                 </HBox>
@@ -58,16 +65,16 @@
             <VBox spacing="10">
                 <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
                 <GridPane hgap="10" vgap="10">
-                    <Label text="From Account:" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                    <ComboBox fx:id="fromAccountCombo" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label text="From Account:" textFill="#ff6200" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <ComboBox fx:id="fromAccountCombo" promptText="Origin" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                    <Label text="To Account:" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                    <ComboBox fx:id="toAccountCombo" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label text="To Account:" textFill="#ff6200" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <ComboBox fx:id="toAccountCombo" promptText="Destination" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                    <Label text="Amount:" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <Label text="Amount:" textFill="#ff6200" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                     <TextField fx:id="transferAmountField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                    <Button fx:id="transferBtn" onAction="#transferMoney" text="Transfer" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Button fx:id="transferBtn" onAction="#transferMoney" text="Transfer" textFill="#ff6200" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                <columnConstraints>
                   <ColumnConstraints />
                   <ColumnConstraints />
@@ -98,9 +105,9 @@
                     </columns>
                 </TableView>
                 <HBox spacing="10">
-                    <Label text="New Amount:" textFill="WHITE" />
+                    <Label text="New Amount:" textFill="#ff6200" />
                     <TextField fx:id="newAmountField" />
-                    <Button fx:id="updateTransactionBtn" onAction="#updateTransaction" text="Update Transaction" />
+                    <Button fx:id="updateTransactionBtn" onAction="#updateTransaction" text="Update Transaction" textFill="#ff6200" />
                 </HBox>
                 <Label fx:id="updateStatusLabel" textFill="red" />
             </VBox>
